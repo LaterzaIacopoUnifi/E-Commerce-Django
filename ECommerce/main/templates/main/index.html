@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'main/css/index.css' %}">
+    <title>Laterza E-Commerce</title>
+</head>
+<body>
+    <header>
+        <nav class="navbar">
+            <a href="#" class="logo">E-Shop</a>
+
+            <form class="search-container" action="#" method="GET">
+                <input type="text" name="q" class="search-input" placeholder="Cerca un prodotto...">
+                <button type="submit" class="search-button">Cerca</button>
+            </form>
+
+            <a href="#" class="login-button">Accedi</a>
+        </nav>
+    </header>
+
+    <main>
+        <h1 class="page-title">Ultimi Arrivi</h1>
+        {% if productList %}
+        <div class="products-grid">
+
+            {% for product in productList %}
+            <article class="product-card">
+                <div class="product-image">Immagine {{ product.name }}</div>
+                <div class="product-info">
+                    <span class="product-category">Elettronica</span>
+                    <a href="#" class="product-title">{{ product.name }}</a>
+                    <div class="product-price">{{ product.cost }}</div>
+                    <button class="add-to-cart-btn">Aggiungi al carrello</button>
+                </div>
+            </article>
+            {% endfor %}
+            {% else %}
+            <p>No polls are available.</p>
+            </div>
+            {% endif %}
+
+
+
+        </div>
+    </main>
+
+    <footer>
+        <p>&copy; 2026 Laterza E-Commerce - Tutti i diritti riservati da Laterza E-Commerce.</p>
+    </footer>
+
+</body>
+</html>
