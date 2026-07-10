@@ -1,0 +1,24 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="{% static 'main/index.css' %}">
+    <title>E-Commerce - Log in</title>
+</head>
+<body>
+<header> <h1 class="navbar">BENVENUTO NEL SITO MIO BELLISSIMO </h1> </header>
+<div class="products-grid">
+    <article class="product-card"> Benvenuta mamma
+        <form action="{% url 'main:login'  %}" method="post">
+            {% csrf_token %}
+
+            {{ form.as_p }}
+
+            <input type="submit" value="Accedi">
+        </form>
+    </article>
+</div>
+<footer> <h5> informazioni utili per il sito da mettere</h5></footer>
+</body>
+</html>

@@ -31,48 +31,8 @@ from django.utils import timezone
 #     def __Question__(self):
 #         return self.question
 
-# --------------User Data----------------------
-class NormalUser(AbstractUser):
-    RULES = (
-        ('USER', 'Normal User'),
-        ('WORKER', 'Worker'),
-        ('MANAGER', 'Manager'),
-    )
-
-    rule = models.CharField(max_length=10,choices=RULES,default='USER')
-    birth_date = models.DateField(null=True, blank=True)
-    phone_number = models.CharField(max_length=15, blank=True, null=True)
-    registration_date = models.DateTimeField(auto_now_add=True)
-    last_change = models.DateTimeField(auto_now=True)
 
 
-    def save(self, *args, **kwargs):
-        self.email = self.email.lower()
-        super().save(*args, **kwargs)
-
-    def get_full_name(self):
-        return f"{self.first_name} {self.last_name}"
-
-    def get_birth_date(self):
-        return f"{self.get_full_name()} - Data di Compleanno : {self.birth_date.strftime("%d/%m/%Y")}"
-
-    def get_phone_number(self):
-        return f"{self.get_full_name()} - Numero di Telefono : {self.phone_number}"
-
-
-class Worker(NormalUser):
-    registration_date_worker = models.DateTimeField(auto_now_add=True,)
-    rule = 'WORKER'
-    business = models.ForeignKey('main.Business', on_delete=models.CASCADE, related_name='workers')
-
-
-
-    #def who_is_business_owner(self):
-    #    return self.groups.filter(name='Capo Azienda').exists()
-
-class Manager(Worker):
-    registration_date_manager = models.DateTimeField(auto_now_add=True)
-    rule = 'MANAGER'
 
 # --------------Item/Product/Business Data----------------------
 class Product(models.Model):
@@ -106,5 +66,42 @@ class Business(models.Model):
     #TODO eventualmente da correggere
     owner = models.ForeignKey('main.NormalUser' ,on_delete=models.CASCADE, related_name='owned_businesses')
 
+    class Meta:
+        verbose_name_plural = "Business"
+
     def __str__(self):
         return f"{self.name} - {self.description}"
+
+
+# --------------User Data----------------------
+class NormalUser(AbstractUser):
+    RULES = (
+        ('USER', 'Normal User'),
+        ('WORKER', 'Worker'),
+        ('MANAGER', 'Manager'),
+    )
+
+    rule = models.CharField(max_length=10,choices=RULES,default='USER')
+    birth_date = models.DateField(null=True, blank=True)
+    phone_number = models.CharField(max_length=15, blank=True, null=True)
+    registration_date = models.DateTimeField(auto_now_add=True)
+    last_change = models.DateTimeField(auto_now=True)
+    business = models.ForeignKey(Business,on_delete=models.SET_NULL,null=True,blank=True,related_name='Worker', help_text="Azienda di appartenenza (only for Worker and Manager)")
+    def save(self, *args, **kwargs):
+        self.email = self.email.lower()
+        super().save(*args, **kwargs)
+
+    def get_full_name(self):
+        return f"{self.first_name} {self.last_name}"
+
+    def get_birth_date(self):
+        return f"{self.get_full_name()} - Data di Compleanno : {self.birth_date.strftime("%d/%m/%Y")}"
+
+    def get_phone_number(self):
+        return f"{self.get_full_name()} - Numero di Telefono : {self.phone_number}"
+
+    # from django.core.exceptions import ValidationError
+    # # paste in your models.py
+    # def only_int(value):
+    #     if value.isdigit() == False:
+    #         raise ValidationError('ID contains characters')
