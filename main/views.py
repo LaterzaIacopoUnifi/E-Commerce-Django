@@ -1,12 +1,10 @@
 from django.shortcuts import get_object_or_404, render, redirect
 from django.template import loader
-from django.http import HttpResponse , HttpResponseRedirect
-from django.db.models import F
-from django.urls import reverse
-from .models import NormalUser , Product , Description , Business
+from django.http import HttpResponse
+from .models import Product
 from carrello.models import Order, OrderItem
-from django.contrib.auth import authenticate, login ,logout
-from django.contrib.auth.forms import UserCreationForm , AuthenticationForm
+from django.contrib.auth import login ,logout
+from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.decorators import login_required
 from .forms import UserForm
 
