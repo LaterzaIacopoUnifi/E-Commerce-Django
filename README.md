@@ -36,6 +36,16 @@ L'applicazione gestisce una gerarchia di permessi a 4 livelli:
 
 ---
 
+## Scenario di Test 
+Per verificare il corretto funzionamento del sito , consiglio di:
+1. **Test Registarzione/Login** : Appena cliccate il link, il sito vi porta alla pagina principale. In alto a destra troverete i bottoni "Registrati" e "Accedi": se volete creare un nuovo profilo allora cliccate su "Registrati" ; altrimenti nel caso volete accedere ad un profilo esistente cliccate su "Accedi"
+2. **Test Inserimento Oggetti nel carrello** : Dopo aver effettuato il login/ la registrazione di un qualsiasi tipo di untente , nella pagina principale provate a cliccare sul tasto "Aggiungi al Carrello" e vedere apparire un numero in alto a destra dove si trova il blocco Carrello.
+3. **Test Effettuare Pagamento** : Dopo aver effettuato il login/ la registrazione di un qualsiasi tipo di untente e dopo aver aggiunto dei prodotti al carrello, nella pagina principale cliccate sul blocco Carrello e visionate gli oggetti aggiunti al carrello e poi provate a cliccare su "Vai al Pagamento". Subito dopo vi porterà ad una pagina che , dopo aver inserito l'indirizzo di spedizione e dopo aver scelto il metodo di pagamento, cliccate su "Vai al pagamento" per effettuare l'acquisto dei prodotti del carrello
+4. **Test Creazione Prodotto** : Dopo essersi collegati come Worker/Manager , nella pagina principale cliccate sul bottone Business e il sito vi porterà in una nuova pagina dove potete aggiungere un prodotto a seconda dell'azienda di cui fate parte. Capiterà che, nel caso di un nuovo Worker/Manager il sito chieda a quale azienda volete lavorare. Dopo Aver scelto potete tranquillamente aggiungere tutti i prodotti che volete
+5. **Test Eliminazione Prodotto**: Dopo essersi collegati come Worker/Manager , nella pagina principale cliccate sul bottone "Elimina Prodotto" di un prodotto che volete eliminare e noterete che il prodotto verrà eliminato dal sito e dalla lista dei prodotti totali che Laterza E-Commerce vuole vendervi
+6. **Test Creazione Business**: Dopo essersi collegati come Manager , nella pagina principale cliccate sul bottone "Business" , dove vi porterà alla gestione del vostro Business. Da qui potrete creare un nuovo Business e nel caso decidere di dovrà diventare il proprietario dell'attività.
+
+---
 ## Istruzioni per l'Installazione Locale
 
 Segui questi passaggi per clonare ed avviare il progetto sul tuo computer:
