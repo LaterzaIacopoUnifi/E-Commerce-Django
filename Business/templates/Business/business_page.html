@@ -82,7 +82,9 @@
             </form>
             {% endif %}
         {% else %}
-            <p>Non hai ancora creato un'azienda.Scegli per quale azienda vuoi far parte</p>
+            <p>Non hai ancora creato un'azienda.</p>
+            {% if all_business %}
+            <p>Scegli per quale azienda vuoi far parte</p>
             <form action="{% url 'Business:choice_business' %}" method="POST">
                 {% csrf_token %}
                 <label>Seleziona Attività:</label>
@@ -93,6 +95,25 @@
                 </select>
                 <button type="submit" class="login-button" name="form_choice_business">Scegli</button>
             </form>
+            {% else %}
+                {% if user.is_superuser or user|has_group:'MANAGER' %}
+                <h2>Aggiungi un nuova Azienda </h2>
+                <form action="{% url 'business:add_business' %}" method="POST">
+                    {% csrf_token %}
+                    <label>Seleziona Nome e caratteristiche Attività:</label>
+                    <br>
+                    <select name="owner_id">
+                        {% for owner in possible_owners %}
+                            {% if owner|has_group:'MANAGER' %}
+                            <option value="{{ owner.id }}">{{ owner.username }}</option>
+                            {% endif %}
+                        {% endfor %}
+                    </select>
+                    {{ formB.as_p }}
+                    <button type="submit" class="login-button" name="form_add_business">Metti in vendita</button>
+                </form>
+                {% endif %}
+            {% endif %}
         {% endif %}
 
     </main>
