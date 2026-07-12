@@ -44,6 +44,9 @@ Per verificare il corretto funzionamento del sito , consiglio di:
 4. **Test Creazione Prodotto** : Dopo essersi collegati come Worker/Manager , nella pagina principale cliccate sul bottone Business e il sito vi porterà in una nuova pagina dove potete aggiungere un prodotto a seconda dell'azienda di cui fate parte. Capiterà che, nel caso di un nuovo Worker/Manager il sito chieda a quale azienda volete lavorare. Dopo Aver scelto potete tranquillamente aggiungere tutti i prodotti che volete
 5. **Test Eliminazione Prodotto**: Dopo essersi collegati come Worker/Manager , nella pagina principale cliccate sul bottone "Elimina Prodotto" di un prodotto che volete eliminare e noterete che il prodotto verrà eliminato dal sito e dalla lista dei prodotti totali che Laterza E-Commerce vuole vendervi
 6. **Test Creazione Business**: Dopo essersi collegati come Manager , nella pagina principale cliccate sul bottone "Business" , dove vi porterà alla gestione del vostro Business. Da qui potrete creare un nuovo Business e nel caso decidere di dovrà diventare il proprietario dell'attività.
+7. **Test Ricerca Prodotti**: In qualsiasi momento la barra della ricera sia disponibile , è possibile cercare i prodotti attraverso la barra di ricerca. Molto comodo soprattutto se non ci si ricordasse del nome del prodotto che vogliamo comprare
+8. **Test Informazioni Prodotti**: Per ogni prodotto è possibile controllare maggiori informazioni semplicemente cliccando sul blocco che identifica l'oggetto. 
+9. **Test Informazioni Prodotti di un Business**: Nel caso volessimo sapere tutti gli oggetti venduti da una sola attività , basterà toccare il nome dell'attività nel blocco che identifica il prodotto in vendita
 
 ---
 ## Istruzioni per l'Installazione Locale
