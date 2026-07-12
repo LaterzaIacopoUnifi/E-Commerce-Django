@@ -11,6 +11,9 @@ https://docs.djangoproject.com/en/6.0/ref/settings/
 """
 
 from pathlib import Path
+import os , dj_database_url
+
+from django.conf.global_settings import CSRF_TRUSTED_ORIGINS
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -25,7 +28,9 @@ SECRET_KEY = 'django-insecure-_n2oq_3oaq^dbs2ye7t5!yisd82m5m*pld$u%c^^(+qlwkurkj
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+
+ALLOWED_HOSTS = ["djangorailway-product.up.railway.app","127.0.0.1","localhost"]
+CSRF_TRUSTED_ORIGINS = ['https://djangorailway-production.up.railway.app']
 
 
 # Application definition
@@ -84,6 +89,9 @@ DATABASES = {
     }
 }
 
+db_from_env = dj_database_url.config(conn_max_age=500)
+DATABASES['default'].update(db_from_env)
+
 
 # Password validation
 # https://docs.djangoproject.com/en/6.0/ref/settings/#auth-password-validators
@@ -122,3 +130,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/6.0/howto/static-files/
 
 STATIC_URL = 'static/'
+
+
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+
