@@ -50,6 +50,7 @@
                         <span class="product-category"><a href="{% url 'business:business_listproduct' product.business.id %}">{{ product.business }}</a></span>
                         <a class="product-title">{{ product.name }}</a>
                         <div class="product-price">{{ product.cost }} €</div>
+                        {% if user.is_authenticated %}
                         <form action="{% url 'carrello:add_to_cart' product.id %}" method="post">
                             {% csrf_token %} <button class="add-to-cart-btn">Aggiungi al carrello</button>
                         </form>
@@ -58,6 +59,7 @@
                             {% csrf_token %}
                             <button class="add-to-cart-btn" type="submit" onclick="return confirm('Sei sicuro di voler eliminare questo prodotto?');">Elimina Prodotto</button>
                         </form>
+                        {% endif %}
                         {% endif %}
                 </div>
                 </a>
