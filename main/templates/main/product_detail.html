@@ -16,33 +16,29 @@
                 <input type="text" name="q" class="search-input" placeholder="{{ placeholder }}">
                 <button type="submit" class="search-button">Cerca</button>
             </form>
+            {% load auth_extras %}
             {% if user.is_authenticated %}
             <span>Ciao, {{ user.username }}!</span>
             <a href="{% url 'main:logout' %}" class="login-button">Logout</a>
+            <a href="{% url 'carrello:page_cart' %}" class="login-button">CARRELLO{% if cart_count %} ( {{ cart_count }} ) {% endif %}</a>
+            <a href="{% url 'main:list_orders' %}" class="login-button">ORDINI{% if order_count %} ( {{ order_count }} ) {% endif %}</a>
+
+            {% if user.is_superuser or user|has_group:'WORKER' or user|has_group:'MANAGER' %}
+            <a href="{% url 'business:business_page' %}" class="login-button">Business</a>
+            {% endif %}
 
             </nav>
     </header>
 
     <main>
-        <h1 class="page-title">Ordini di {{ user.username }}</h1>
-        {% if orders %}
-        <div class="cart-list">
-            {% for order in orders %}
-            <div class="cart-item">
-                <div class="cart-item-info">
-                    <div class="product-info">
-                        <a href="{% url 'main:view_order' order.id %}" class="cart-item-title">Ordine #{{ order.id }} - Del {{ order.created_at|date:"d/m/Y" }}</a>
-                        <a href="{% url 'main:delete_order' order.id %}" class="login-button">ELIMINA CRONOLOGIA DI QUESTO ORDINE</a>
-                    </div>
-                </div>
-            </div>
-            {% endfor %}
-            <a href="#" class="login-button">Numero Totale di ordini effettuati: {{ order_count }}</a>
-
-            {% else %}
-            <p>No hai fatto ancora nessun ordine</p>
-            </div>
-            {% endif %}
+        <h1>{{ product.name }}</h1>
+        <p>Prezzo: {{ product.cost }} €</p>
+        <p>Venduto da: {{ product.business }}</p>
+        <p>Descrizione: {{ description.description }}</p>
+        <form action="{% url 'carrello:add_to_cart' product.id %}" method="post">
+            {% csrf_token %}
+            <button type="submit">Aggiungi al carrello</button>
+        </form>
 
 
 

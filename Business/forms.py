@@ -1,6 +1,7 @@
 from django import forms
 from django.db.models import Model
 from main.models import Product, Description , Business , NormalUser
+from .models import WorkerBusiness
 
 
 
@@ -31,6 +32,7 @@ class AddBusinessForm(forms.Form):
     descrizione = forms.CharField(widget=forms.Textarea(attrs={'rows': 4}), label="Descrizione del Prodotto")
 
     def save(self, owner_instance):
+
         new_business = Business.objects.create(
             name=self.cleaned_data['nome'],
             description=self.cleaned_data['descrizione'],
@@ -45,7 +47,15 @@ class ChoiceBusinessForm(forms.Form):
     def save(self,user , new_business):
         business_obj = Business.objects.filter(id=new_business).first()
         if business_obj:
-            user.business = business_obj
-            user.save()
+            worker_business_relation, created = WorkerBusiness.objects.get_or_create(
+                business=business_obj,
+                worker=user
+            )
+            if created:
+                print(f"L'utente {user.username} è stato associato al business {business_obj.nome}!")
+            else:
+                print(f"L'utente {user.username} lavora già in questo business.")
 
-        return user
+            return worker_business_relation
+
+        return None

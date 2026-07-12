@@ -1,8 +1,8 @@
-from django.shortcuts import render
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect ,get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django import forms
 from main.models import Business , Product , Description, NormalUser
+from .models import WorkerBusiness
 
 from .forms import AddProductForm, AddBusinessForm , ChoiceBusinessForm
 from django.template import loader
@@ -12,12 +12,21 @@ from django.http import HttpResponse , HttpResponseRedirect
 # Create your views here.
 
 
+def business_listproduct(request,business_id):
+    business = get_object_or_404(Business, id=business_id)
+
+    productList = Product.objects.filter(business=business)
+    context = {
+        'productList': productList,
+        'business': business,
+    }
+    return render(request, 'Business/business_listproduct.html', context)
 
 
 
 @login_required
 def business_page(request):
-    my_business = request.user.owned_businesses.all()
+    my_business = Business.objects.filter(workers__worker=request.user)
     all_business = Business.objects.all()
     form_add_product = AddProductForm()
     form_add_business = AddBusinessForm()
@@ -37,7 +46,7 @@ def business_page(request):
 
 @login_required
 def add_product(request):
-    my_business = request.user.owned_businesses.all()
+    my_business = Business.objects.filter(workers__worker=request.user)
 
     if request.method == 'POST':
 
@@ -63,12 +72,20 @@ def add_business(request):
         form_add_business = AddBusinessForm(request.POST)
         owner_id = request.POST.get('owner_id')
         owner_scelta = NormalUser.objects.filter(id=owner_id).first()
+
         if form_add_business.is_valid():
-            Business.objects.create(
+            business=Business.objects.create(
                 name=form_add_business.cleaned_data['nome'],
                 description=form_add_business.cleaned_data['descrizione'],
                 owner=owner_scelta,
             )
+
+            WorkerBusiness.objects.create(
+                business=business,
+                worker=owner_scelta,
+            )
+
+
         else:
             print("qualcosa è andato storto")
 

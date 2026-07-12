@@ -12,8 +12,8 @@
         <nav class="navbar">
             <a href="{% url 'main:index' %}" class="logo">E-Shop</a>
 
-            <form class="search-container" action="#" method="GET">
-                <input type="text" name="q" class="search-input" placeholder="Cerca un prodotto...">
+             <form class="search-container" action="{% url 'main:search_products' %}" method="GET">
+                <input type="text" name="q" class="search-input" placeholder="{{ placeholder }}">
                 <button type="submit" class="search-button">Cerca</button>
             </form>
 
@@ -54,7 +54,7 @@
             <h2>Aggiungi un nuovo prodotto al tuo Negozio {% if my_business %} {% for my in my_business %} {{ my.name }}, {% endfor %}{% endif %}</h2>
             <form action="{% url 'Business:add_product' %}" method="POST">
                 {% csrf_token %}
-                <label>Seleziona Attività:</label>
+                <label>Seleziona Attività in cui aggiungere il prodotto :</label>
                 <select name="business_id">
                     {% for b in my_business %}
                     <option value="{{ b.id }}">{{ b.name }}</option>
@@ -70,6 +70,7 @@
                 {% csrf_token %}
                 <label>Seleziona Nome e caratteristiche Attività:</label>
                 <br>
+                <label>Scegli il Proprietario:</label>
                 <select name="owner_id">
                     {% for owner in possible_owners %}
                         {% if owner|has_group:'MANAGER' %}
@@ -78,7 +79,7 @@
                     {% endfor %}
                 </select>
                 {{ formB.as_p }}
-                <button type="submit" class="login-button" name="form_add_business">Metti in vendita</button>
+                <button type="submit" class="login-button" name="form_add_business">Crea una nuova azienda</button>
             </form>
             {% endif %}
         {% else %}
@@ -87,7 +88,7 @@
             <p>Scegli per quale azienda vuoi far parte</p>
             <form action="{% url 'Business:choice_business' %}" method="POST">
                 {% csrf_token %}
-                <label>Seleziona Attività:</label>
+                <label>Seleziona Business:</label>
                 <select name="business_id">
                     {% for b in all_business %}
                     <option value="{{ b.id }}">{{ b.name }}</option>
@@ -110,7 +111,7 @@
                         {% endfor %}
                     </select>
                     {{ formB.as_p }}
-                    <button type="submit" class="login-button" name="form_add_business">Metti in vendita</button>
+                    <button type="submit" class="login-button" name="form_add_business">Seleziona Attività</button>
                 </form>
                 {% endif %}
             {% endif %}

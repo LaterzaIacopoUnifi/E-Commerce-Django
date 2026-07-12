@@ -38,7 +38,7 @@
     </header>
 
     <main>
-        <h1 class="page-title">Ultimi Arrivi</h1>
+        <h1 class="page-title">Oggetti di {% if business %} {{  business.name }} {% endif %}</h1>
         {% if productList %}
         <div class="products-grid">
 
@@ -47,24 +47,18 @@
                 <a href="{% url 'main:product_detail' product.id %}">
                     <div class="product-image">Immagine {{ product.name }}</div>
                     <div class="product-info">
-                        <span class="product-category"><a href="{% url 'business:business_listproduct' product.business.id %}">{{ product.business }}</a></span>
+                        <span class="product-category">{{ product.business }}</span>
                         <a class="product-title">{{ product.name }}</a>
                         <div class="product-price">{{ product.cost }} €</div>
                         <form action="{% url 'carrello:add_to_cart' product.id %}" method="post">
                             {% csrf_token %} <button class="add-to-cart-btn">Aggiungi al carrello</button>
                         </form>
-                        {% if user.is_superuser or user|has_group:'WORKER' or user|has_group:'MANAGER' %}
-                        <form action="{% url 'main:delete_product' product.id %}" method="post">
-                            {% csrf_token %}
-                            <button class="add-to-cart-btn" type="submit" onclick="return confirm('Sei sicuro di voler eliminare questo prodotto?');">Elimina Prodotto</button>
-                        </form>
-                        {% endif %}
                 </div>
                 </a>
             </article>
             {% endfor %}
             {% else %}
-            <p>No polls are available.</p>
+            <p>Non ha prodotti.</p>
             </div>
             {% endif %}
 

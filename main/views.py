@@ -1,12 +1,13 @@
 from django.shortcuts import get_object_or_404, render, redirect
 from django.template import loader
 from django.http import HttpResponse
-from .models import Product
+from .models import Product, Description
 from carrello.models import Order, OrderItem
 from django.contrib.auth import login ,logout
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.decorators import login_required
 from .forms import UserForm
+from Business.models import WorkerBusiness
 
 
 # Create your views here.
@@ -91,6 +92,17 @@ def search_products(request):
 
     return redirect('main:index')
 
+def product_detail(request, product_id):
+    product = get_object_or_404(Product, id=product_id)
+    description = Description.objects.filter(product=product)
+    context = {
+        'product': product,
+        'description': description,
+
+    }
+
+    return render(request, 'main/product_detail.html', context)
+
 
 @login_required
 def delete_order(request, order_id):
@@ -99,3 +111,20 @@ def delete_order(request, order_id):
 
     return redirect('main:list_orders')
 
+
+
+
+@login_required
+def delete_product(request, product_id):
+    product = get_object_or_404(Product, id=product_id)
+    business = product.business
+
+    is_owner = (business.owner == request.user)
+    is_worker = WorkerBusiness.objects.filter(business=business, worker=request.user).exists()
+
+    if is_owner or is_worker:
+        if request.method == 'POST':
+            product.delete()
+
+
+    return redirect('main:index')
