@@ -1,0 +1,13 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" href="{% static 'carrello/index.css' %}">
+    <meta http-equiv="refresh" content="3;url={% url 'main:index' %}">
+    <title>Pagamento Completato</title>
+</head>
+<body>
+    <h1>Pagamento effettuato con successo!</h1>
+    <p>Grazie per il tuo acquisto. Sarai reindirizzato alla home tra pochi istanti...</p>
+</body>
+</html>

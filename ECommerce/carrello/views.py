@@ -1,8 +1,9 @@
 from django.shortcuts import render , redirect, get_object_or_404
-from .models import Cart, CartItem
+from .models import Cart, CartItem , Order , OrderItem
 from django.template import loader
 from django.http import HttpResponse , HttpResponseRedirect
 from main.models import Product , NormalUser
+from .forms import CheckoutForm
 
 # Create your views here.
 
@@ -36,8 +37,46 @@ def page_cart(request):
         print(f"Un nuovo utente ha appena effettuato l'accesso!")
     else:
         messaggio = "Bentornato."
-        print(f"L'utente {NormalUser.username} ha appena effettuato l'accesso!")
+        print(f"L'utente {request.user.username} ha appena effettuato l'accesso!")
 
-    cartUser = Cart.objects.get(user=request.user)
+    cart_check = Cart.objects.filter(user=request.user).exists()
+    if cart_check:
+        cartUser = Cart.objects.get(user=request.user)
+    else:
+        cartUser = Cart.objects.create(user=request.user)
+
     items = CartItem.objects.filter(cart=cartUser).select_related('product')
-    return render(request , 'carrello/carrello_page.html' , {'items' : items})
+    total_price = sum(item.total_price for item in items)
+    context = {
+        "items": items,
+        "total_price": total_price
+    }
+    return render(request , 'carrello/carrello_page.html' , context)
+
+
+def payment(request):
+    cart = Cart.objects.get(user=request.user)
+    items = CartItem.objects.filter(cart=cart)
+    total = sum(item.total_price for item in items)
+    if request.method == 'POST':
+        form = CheckoutForm(request.POST)
+        if form.is_valid():
+            order = Order.objects.create(user=request.user, total_amount=total)
+
+            for item in items:
+                OrderItem.objects.create(order=order, product=item.product, quantity=item.quantity)
+
+            items.delete()
+
+            return render(request, 'carrello/pagamento_effettuato.html')
+    else:
+        form = CheckoutForm()
+
+    context = {
+        "items": items,
+        "total": total,
+        "form": form
+    }
+    return render(request, 'carrello/pagamento.html', context)
+
+

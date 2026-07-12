@@ -10,20 +10,30 @@
 <body>
     <header>
         <nav class="navbar">
-            <a href="#" class="logo">E-Shop</a>
+            <a href="{% url 'main:index' %}" class="logo">E-Shop</a>
 
-            <form class="search-container" action="#" method="GET">
-                <input type="text" name="q" class="search-input" placeholder="Cerca un prodotto...">
+            <form class="search-container" action="{% url 'main:search_products' %}" method="GET">
+                <input type="text" name="q" class="search-input" placeholder="{{ placeholder }}">
                 <button type="submit" class="search-button">Cerca</button>
             </form>
+
+            {% load auth_extras %}
             {% if user.is_authenticated %}
-            <span>Ciao, {{ user.username }}!</span>
-            <a href="{% url 'main:logout' %}" class="login-button">Logout</a>
-            <a href="{% url 'carrello:page_cart' %}" class="login-button">CARRELLO{% if cart_count %} ( {{ cart_count }} ) {% endif %}</a>
+                <span>Ciao, {{ user.username }}!</span>
+                <a href="{% url 'main:logout' %}" class="login-button">Logout</a>
+                <a href="{% url 'carrello:page_cart' %}" class="login-button">CARRELLO{% if cart_count %} ( {{ cart_count }} ) {% endif %}</a>
+                <a href="{% url 'main:list_orders' %}" class="login-button">ORDINI{% if order_count %} ( {{ order_count }} ) {% endif %}</a>
+
+                {% if user.is_superuser or user|has_group:'WORKER' or user|has_group:'MANAGER' %}
+                <a href="{% url 'business:business_page' %}" class="login-button">Business</a>
+                {% endif %}
+
             {% else %}
-            <a href="{% url 'main:reg' %}" class="login-button">Registrati</a>
-            <a href="{% url 'main:login' %}" class="login-button">Accedi</a>
+                <a href="{% url 'main:reg' %}" class="login-button">Registrati</a>
+                <a href="{% url 'main:login' %}" class="login-button">Accedi</a>
             {% endif %}
+
+
         </nav>
     </header>
 
@@ -36,9 +46,9 @@
             <article class="product-card">
                 <div class="product-image">Immagine {{ product.name }}</div>
                 <div class="product-info">
-                    <span class="product-category">Elettronica</span>
+                    <span class="product-category">{{ product.business }}</span>
                     <a href="#" class="product-title">{{ product.name }}</a>
-                    <div class="product-price">{{ product.cost }}</div>
+                    <div class="product-price">{{ product.cost }} €</div>
                     <form action="{% url 'carrello:add_to_cart' product.id %}" method="post">
                         {% csrf_token %} <button class="add-to-cart-btn">Aggiungi al carrello</button>
                     </form>

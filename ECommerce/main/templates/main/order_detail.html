@@ -4,15 +4,13 @@
 <head>
     <meta charset="UTF-8">
 
-    <link rel="stylesheet" href="{% static 'carrello/index.css' %}">
+    <link rel="stylesheet" href="{% static 'main/index.css' %}">
     <title>Laterza E-Commerce</title>
 </head>
 <body>
     <header>
         <nav class="navbar">
             <a href="{% url 'main:index' %}" class="logo">E-Shop</a>
-
-
 
             <form class="search-container" action="#" method="GET">
                 <input type="text" name="q" class="search-input" placeholder="Cerca un prodotto...">
@@ -26,28 +24,21 @@
     </header>
 
     <main>
-        <h1 class="page-title">Carrello di {{ user.username }}</h1>
-        {% if items %}
+        <h1 class="page-title">Ordine numero {{ order.id }} di {{ user.username }}</h1>
+        {% if productList %}
         <div class="cart-list">
-            {% for item in items %}
+            {% for item in productList %}
             <div class="cart-item">
                 <div class="cart-item-info">
-                    <div class="product-image">Immagine {{ item.product.name }}</div>
                     <div class="product-info">
-                        <span class="product-category">Elettronica</span>
-                        <a href="#" class="cart-item-title">{{ item.product.name }}</a>
-                        <div class="cart-item-price">{{ item.product.cost }} €  * {{ item.quantity }} = {{ item.total_price}} </div>
+                        <a href="{% url 'main:view_order' order.id %}" class="cart-item-title">{{ item.product.name }} = {{ item.product.cost }}€ * {{ item.quantity }}</a>
                     </div>
                 </div>
             </div>
             {% endfor %}
-            <a href="#" class="login-button">{{ items.total_price }}</a>
-            <form action="{% url 'carrello:payment' %}" method="post">
-                {% csrf_token %}
-                <button class="add-to-cart-btn">Vai al pagamento</button>
-            </form>
+
             {% else %}
-            <p>Non hai niente nel carrello</p>
+            <p>No polls are available.</p>
             </div>
             {% endif %}
 

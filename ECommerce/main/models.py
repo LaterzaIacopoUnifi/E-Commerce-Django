@@ -1,5 +1,5 @@
 import datetime
-from django.contrib.auth.models import AbstractUser
+from django.contrib.auth.models import AbstractUser , PermissionsMixin
 from django.db import models
 from django.utils import timezone
 
@@ -35,9 +35,24 @@ from django.utils import timezone
 
 
 # --------------Item/Product/Business Data----------------------
+
+
+class Business(models.Model):
+    name = models.CharField(max_length=200)
+    description = models.CharField(max_length=200)
+    owner = models.ForeignKey('main.NormalUser' ,on_delete=models.CASCADE, related_name='owned_businesses')
+
+    class Meta:
+        verbose_name_plural = "Business"
+
+    def __str__(self):
+        return f"{self.name} - {self.description} - Propetario: {self.owner}"
+
+
 class Product(models.Model):
     name = models.CharField(max_length=200)
     cost = models.IntegerField(default=0)
+    business = models.ForeignKey(Business, on_delete=models.CASCADE, related_name='products')
 
     def __str__(self):
         return self.name
@@ -60,33 +75,20 @@ class Description(models.Model):
     def __Product__(self):
         return self.product
 
-class Business(models.Model):
-    name = models.CharField(max_length=200)
-    description = models.TextField(max_length=200)
-    #TODO eventualmente da correggere
-    owner = models.ForeignKey('main.NormalUser' ,on_delete=models.CASCADE, related_name='owned_businesses')
-
-    class Meta:
-        verbose_name_plural = "Business"
-
-    def __str__(self):
-        return f"{self.name} - {self.description}"
-
-
 # --------------User Data----------------------
-class NormalUser(AbstractUser):
-    RULES = (
-        ('USER', 'Normal User'),
+class NormalUser(AbstractUser,PermissionsMixin):
+    ROLES = (
+        ('NormalUser','Normal User'),
         ('WORKER', 'Worker'),
         ('MANAGER', 'Manager'),
     )
 
-    rule = models.CharField(max_length=10,choices=RULES,default='USER')
+    role = models.CharField(max_length=10,choices=ROLES,default='NormalUser')
     birth_date = models.DateField(null=True, blank=True)
     phone_number = models.CharField(max_length=15, blank=True, null=True)
     registration_date = models.DateTimeField(auto_now_add=True)
     last_change = models.DateTimeField(auto_now=True)
-    business = models.ForeignKey(Business,on_delete=models.SET_NULL,null=True,blank=True,related_name='Worker', help_text="Azienda di appartenenza (only for Worker and Manager)")
+    business = models.ForeignKey(Business,on_delete=models.SET_NULL,null=True,blank=True,related_name='Work', help_text="Azienda di appartenenza (only for Worker and Manager)")
     def save(self, *args, **kwargs):
         self.email = self.email.lower()
         super().save(*args, **kwargs)
@@ -100,8 +102,6 @@ class NormalUser(AbstractUser):
     def get_phone_number(self):
         return f"{self.get_full_name()} - Numero di Telefono : {self.phone_number}"
 
-    # from django.core.exceptions import ValidationError
-    # # paste in your models.py
-    # def only_int(value):
-    #     if value.isdigit() == False:
-    #         raise ValidationError('ID contains characters')
+    @property
+    def have_business(self):
+        return self.business is not None

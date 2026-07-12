@@ -3,7 +3,6 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-
     <link rel="stylesheet" href="{% static 'carrello/index.css' %}">
     <title>Laterza E-Commerce</title>
 </head>
@@ -11,8 +10,6 @@
     <header>
         <nav class="navbar">
             <a href="{% url 'main:index' %}" class="logo">E-Shop</a>
-
-
 
             <form class="search-container" action="#" method="GET">
                 <input type="text" name="q" class="search-input" placeholder="Cerca un prodotto...">
@@ -26,28 +23,33 @@
     </header>
 
     <main>
-        <h1 class="page-title">Carrello di {{ user.username }}</h1>
+        <h1 class="page-title">Pagamento del carrello di {{ user.username }}</h1>
         {% if items %}
+
+
         <div class="cart-list">
-            {% for item in items %}
-            <div class="cart-item">
-                <div class="cart-item-info">
-                    <div class="product-image">Immagine {{ item.product.name }}</div>
-                    <div class="product-info">
-                        <span class="product-category">Elettronica</span>
-                        <a href="#" class="cart-item-title">{{ item.product.name }}</a>
-                        <div class="cart-item-price">{{ item.product.cost }} €  * {{ item.quantity }} = {{ item.total_price}} </div>
-                    </div>
-                </div>
-            </div>
-            {% endfor %}
-            <a href="#" class="login-button">{{ items.total_price }}</a>
+            <ul class="cart-list-ul">
+                {% for item in items %}
+                <li class="cart-list-item">
+                    <span class="category">Elettronica</span>
+                    <strong class="product-name">{{ item.product.name }}</strong>
+                    <span class="price-calc">
+                        {{ item.product.cost }} € * {{ item.quantity }} = {{ item.total_price }}
+                    </span>
+                </li>
+                {% endfor %}
+            </ul>
+
             <form action="{% url 'carrello:payment' %}" method="post">
                 {% csrf_token %}
-                <button class="add-to-cart-btn">Vai al pagamento</button>
+
+                {{ form.as_p }}
+                <br>
+                <a class="login-button">Totale Carrello = {{ total }} €</a>
+                <input class="add-to-cart-btn ,login-button" type="submit" value="Vai al Pagamento">
             </form>
             {% else %}
-            <p>Non hai niente nel carrello</p>
+            <p>No polls are available.</p>
             </div>
             {% endif %}
 
@@ -63,7 +65,7 @@
     </header>
 
     <main>
-        <h1 class="page-title">Accedi per vedere il tuo carrello</h1>
+        <h1 class="page-title">Accedi per effettuare il tuo pagamento</h1>
     </main>
     {% endif %}
     <footer>

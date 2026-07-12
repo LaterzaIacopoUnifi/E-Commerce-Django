@@ -38,7 +38,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'main.apps.MainConfig',
-    'carrello.apps.CarrelloConfig'
+    'carrello.apps.CarrelloConfig',
+    'Business.apps.BusinessConfig'
 
 ]
 
