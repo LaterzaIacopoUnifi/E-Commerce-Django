@@ -1,1 +1,1 @@
-web: python ECommerce/manage.py makemigrations && python ECommerce/manage.py migrate && python ECommerce/manage.py collectstatic --noinput && gunicorn ECommerce.wsgi --bind 0.0.0.0:$PORT --log-file-
+web: python ECommerce/manage.py makemigrations && python ECommerce/manage.py migrate && python ECommerce/manage.py collectstatic --noinput && gunicorn ECommerce.wsgi:application --bind 0.0.0.0:$PORT --log-file-
